@@ -12,24 +12,58 @@ export default class Gameboard {
   }
   // place ship at (x,y) using the Ship factory function
   // ships are placed:
-  //   to the right of the coordinatae if horizontal
-  //   below the coordinate if vertical
-  //   logic to determine whether or not it will fit in the grid will be made in the DOM  
   placeShip(x, y, shipLength, direction = "horizontal") {
     const ship = new Ship(shipLength);
     if (direction === "horizontal") {
+      if (10 * y + x + shipLength - 1 > (10 * (y + 1) - 1)){
+        return false;
+      }
       for (let i = 0; i < shipLength; i++) {
         this.board[10 * y + x + i] = ship;
       }
     } else if (direction === "vertical") {
-        for (let i = 0; i < shipLength; i++){
-            this.board[(10 * y) + x + (10 * i)] = ship;
-        }
+      if (10 * y + x + (10 * (shipLength - 1)) > 99) {
+        return false;
+      }
+      for (let i = 0; i < shipLength; i++) {
+        this.board[10 * y + x + 10 * i] = ship;
+      }
+    }
+    return true;
+  }
+  //   0 Represents open waters
+  //   1 Represents a missed shot
+  //   Anywhere else there is a ship object, which stores the grid value where it was hit
+  receiveAttack(x, y) {
+    const gridPos = x + 10 * y;
+    const checkGrid = this.board[gridPos];
+    if (checkGrid === 0) {
+      this.board[gridPos] = 1;
+      return false;
+    } else if (checkGrid == 1) {
+      return false;
+    } else {
+      this.board[gridPos].hit(gridPos);
+      return true;
     }
   }
-  receiveAttack(x, y) {
-    if (x > 9 || y > 9 || x < 0 || y < 0) {
-      return;
-    }
+
+  makeRandomBoard() {
+    const ships = [
+      new Ship(2),
+      new Ship(3),
+      new Ship(3),
+      new Ship(4),
+      new Ship(5),
+    ];
+
+  }
+
+  allShipsSunk() {
+    let checkBoard = this.board
+      .filter((entry) => entry !== 1)
+      .filter((entry) => entry !== 0)
+      .filter((entry) => entry.sunk === false);
+    return checkBoard.length === 0;
   }
 }

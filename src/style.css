@@ -1,28 +1,66 @@
+:root {
+    --background: #707070;
+    --text-color: #c9982f;
+}
+
 *,
 *::after,
 *::before {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    /* outline: 1px solid black; */
+    outline: 1px solid black;
 }
 
-footer {   
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+}
+
+header,
+footer {
+    background-color: var(--background);
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--background-color);
+    padding: 2rem;
+    color: var(--text-color);
+}
+
+
+main {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
     padding: 2rem;
 }
 
-footer > a{
+.grid-element {
+    min-height: min(25px, 2dvh);
+    min-width: min(25px, 2dvh);
+}
+
+.grid-element:hover {
+    background-color: black;
+}
+
+
+footer>a {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: 1rem;
 }
 
-footer > a:hover {
+footer>a:hover {
     transform: rotate(360deg);
     transition-duration: 0.5s;
 }
@@ -31,4 +69,5 @@ footer > a:hover {
 .svg {
     height: 2rem;
     width: 2rem;
+    color: antiquewhite;
 }
