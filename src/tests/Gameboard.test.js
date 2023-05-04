@@ -32,6 +32,11 @@ describe("Gameboard", () => {
     expect(gameboard.board[91]).toBe(0);
   });
 
+  test("Does not place a ship when there is one obstructing it", () => {
+    gameboard.placeShip(0, 0, 3);
+    expect(gameboard.placeShip(0, 0, 2)).toBeFalsy();
+  });
+
   test("Attacking open waters changes its value to 1", () => {
     gameboard.receiveAttack(0, 0);
     expect(gameboard.board[0]).toEqual(1);
@@ -51,6 +56,11 @@ describe("Gameboard", () => {
   test("Empty board means all ships are sunk", () => {
     expect(gameboard.allShipsSunk()).toBeTruthy();
   });
+
+  test("Creates a random board successfully", () => {
+    gameboard.makeRandomBoard();
+    expect(gameboard.howManyShips()).toBe(17);
+  })
 
   test("Ship sunk correctly shown", () => {
     gameboard.placeShip(0, 0, 1);

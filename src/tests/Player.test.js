@@ -1,3 +1,4 @@
+import Game from "../modules/Game";
 import Player from "../modules/Player";
 
 describe("Player", () => {
@@ -10,5 +11,8 @@ describe("Player", () => {
       playerBoard: "test",
       enemyBoard: "test"
     });
+  })
+  test("Game", () => {
+    expect(Game()).toBe(1);
   });
 });

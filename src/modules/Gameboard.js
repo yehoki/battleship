@@ -14,23 +14,42 @@ export default class Gameboard {
   // ships are placed:
   placeShip(x, y, shipLength, direction = "horizontal") {
     const ship = new Ship(shipLength);
-    if (direction === "horizontal") {
-      if (10 * y + x + shipLength - 1 > (10 * (y + 1) - 1)){
-        return false;
-      }
+    const startPlace = 10 * y + x;
+    if (
+      direction === "horizontal" &&
+      startPlace + shipLength - 1 <= 10 * (y + 1) - 1 &&
+      this.anyShips(startPlace, shipLength)
+    ) {
       for (let i = 0; i < shipLength; i++) {
-        this.board[10 * y + x + i] = ship;
+        this.board[startPlace + i] = ship;
       }
-    } else if (direction === "vertical") {
-      if (10 * y + x + (10 * (shipLength - 1)) > 99) {
-        return false;
-      }
+      return true;
+    } else if (
+      direction === "vertical" &&
+      startPlace + 10 * (shipLength - 1) < 100 &&
+      this.anyShips(startPlace, shipLength)
+    ) {
       for (let i = 0; i < shipLength; i++) {
-        this.board[10 * y + x + 10 * i] = ship;
+        this.board[startPlace + 10 * i] = ship;
       }
+      return true;
     }
-    return true;
+    return false;
   }
+
+  // Helper function - checks if array is unoccupied in the area where we want to place a ship
+  anyShips(startPlace, shipLength) {
+    if (startPlace < 0 || startPlace > 99 || startPlace + shipLength > 99) {
+      return false;
+    }
+    return (
+      this.board
+        .slice(startPlace, shipLength)
+        .filter((entry) => typeof entry === "number").length ===
+      this.board.slice(startPlace, shipLength).length
+    );
+  }
+
   //   0 Represents open waters
   //   1 Represents a missed shot
   //   Anywhere else there is a ship object, which stores the grid value where it was hit
@@ -56,7 +75,39 @@ export default class Gameboard {
       new Ship(4),
       new Ship(5),
     ];
+    for (const ship of ships) {
+      const shipLength = ship.length;
+      const direction =
+        Math.round(Math.random() * 2) === 0 ? "horizontal" : "vertical";
+      this.placeRandomShip(shipLength, direction);
+    }
+  }
 
+  placeRandomShip(shipLength, direction) {
+    if (direction === "horizontal") {
+      let x = Math.round(Math.random() * (10 - shipLength));
+      let y = Math.round(Math.random() * 9);
+      while (!this.anyShips(10 * y + x, shipLength)) {
+        x = Math.round(Math.random() * (10 - shipLength));
+        y = Math.round(Math.random() * 9);
+      }
+      this.placeShip(x, y, shipLength, "horizontal");
+    } else if (direction === "vertical") {
+      let x = Math.round(Math.random() * 9);
+      let y = Math.round(Math.random() * (10 - shipLength));
+      while (!this.anyShips(10 * y + x, shipLength)) {
+        x = Math.round(Math.random() * 9);
+        y = Math.round(Math.random() * (10 - shipLength));
+      }
+      this.placeShip(x, y, shipLength, "vertical");
+    }
+    return true;
+  }
+
+  howManyShips() {
+    return this.board
+      .filter((entry) => entry !== 1)
+      .filter((entry) => entry !== 0).length;
   }
 
   allShipsSunk() {

@@ -1,11 +1,19 @@
 import GithubIcon from "../images/github-mark.svg";
+import Game from "./Game";
+import Gameboard from "./Gameboard";
 
 export default class ScreenController {
+  constructor() {
+    this.game = new Game();
+  }
   static makeHeader() {
     const header = document.createElement("header");
     const headerTitle = document.createElement("h1");
     headerTitle.textContent = "Battleship";
     header.appendChild(headerTitle);
+    console.log(this.game);
+    const test = new Game();
+    console.log(test);
     return header;
   }
 
@@ -16,30 +24,66 @@ export default class ScreenController {
     return main;
   }
 
-  static makeGrid(){
+  // Initialise game - place ships
+
+  static placeShips() {
+    const shipArea = document.createElement("div");
+    shipArea.id = "ship-area";
+    shipArea.className = "ship-area";
+    const carrier = document.createElement("div");
+    const battleship = document.createElement("div");
+    const destroyer = document.createElement("div");
+    const submarine = document.createElement("div");
+    const patrolBoat = document.createElement("div");
+    carrier.dataset.shipLength = 5;
+    battleship.dataset.shipLength = 4;
+    destroyer.dataset.shipLength = 3;
+    submarine.dataset.shipLength = 3;
+    patrolBoat.dataset.shipLength = 2;
+    const ships = [carrier, battleship, destroyer, submarine, patrolBoat];
+    for (const ship of ships) {
+      ship.id = "ship";
+      ship.className = "ship";
+      this.makeShip(ship.dataset.shipLength, ship);
+      ship.addEventListener("click", () => {
+        ship.id = "ship selected";
+        console.log("click");
+      });
+      shipArea.appendChild(ship);
+    }
+    console.log(ships);
+    return shipArea;
+  }
+
+  static makeShip(shipLength, ship) {
+    for (let i = 0; i < shipLength; i++) {
+      const shipBlock = document.createElement("div");
+      shipBlock.className = "ship-block";
+      ship.appendChild(shipBlock);
+    }
+  }
+
+  static makeGrid() {
     const grid = document.createElement("div");
     grid.className = "grid";
-    for (let i = 0; i < 100; i++){
+    for (let i = 0; i < 100; i++) {
       const gridElement = document.createElement("button");
-      gridElement.className = "grid-element"
+      gridElement.className = "grid-element";
       gridElement.id = i;
       gridElement.addEventListener("click", (e) => {
         console.log(e.target.id);
-      })
+      });
       grid.appendChild(gridElement);
     }
     return grid;
   }
 
-  static placeShips() {
-    const shipArea = document.createElement("div");
-    shipArea.id = "ship-area";
-    
-    return shipArea;
+  static displayGrid(gameboard) {
+    for (let i = 0; i < 100; i++) {
+      if (gameboard.board[i] !== 0 && gameboard.board[i] !== 1) {
+      }
+    }
   }
-
-
-
 
   static makeFooter() {
     const footer = document.createElement("footer");
@@ -61,5 +105,8 @@ export default class ScreenController {
     document.body.appendChild(this.makeHeader());
     document.body.appendChild(this.makeMain());
     document.body.appendChild(this.makeFooter());
+    const gameboard = new Gameboard();
+    gameboard.makeBoard();
+    gameboard.makeRandomBoard();
   }
 }
