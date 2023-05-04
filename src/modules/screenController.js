@@ -41,19 +41,32 @@ export default class ScreenController {
     submarine.dataset.shipLength = 3;
     patrolBoat.dataset.shipLength = 2;
     const ships = [carrier, battleship, destroyer, submarine, patrolBoat];
+    // creates all ships
+    this.displayGrid();
+    console.log(this.game);
     for (const ship of ships) {
       ship.id = "ship";
       ship.className = "ship";
       this.makeShip(ship.dataset.shipLength, ship);
       ship.addEventListener("click", () => {
+        this.deselectShips();
         ship.id = "ship selected";
-        console.log("click");
+        ship.className = "ship-select";
       });
       shipArea.appendChild(ship);
     }
-    console.log(ships);
     return shipArea;
   }
+  // Takes off the active tag from all ships
+  static deselectShips() {
+    const ships = [...document.querySelectorAll(".ship-select")];
+    for (const ship of ships) {
+      ship.id = "ship";
+      ship.className = "ship";
+    }
+  }
+
+  static placeShipsOnBoard(ship) {}
 
   static makeShip(shipLength, ship) {
     for (let i = 0; i < shipLength; i++) {
@@ -79,9 +92,14 @@ export default class ScreenController {
   }
 
   static displayGrid(gameboard) {
+    const grid = document.getElementById("grid");
     for (let i = 0; i < 100; i++) {
-      if (gameboard.board[i] !== 0 && gameboard.board[i] !== 1) {
-      }
+      document.getElementById(i);
+      console.log(i);
+      // if (gameboard.board[i] !== 0 && gameboard.board[i] !== 1) {
+
+      // } else if (gameboard.board[i] === 1){
+      // }
     }
   }
 

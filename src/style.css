@@ -44,7 +44,8 @@ main {
     align-items: center;
 }
 
-.ship {
+.ship,
+.ship-select {
     display: flex;
     margin: 0.5rem;
     justify-content: center;
@@ -52,7 +53,12 @@ main {
     width: fit-content;
 }
 
-.ship:hover {
+.ship-select {
+    background-color: aqua;
+}
+
+.ship:hover,
+.ship:active {
     background-color: aqua;
 }
 
